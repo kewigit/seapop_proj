@@ -1,28 +1,26 @@
 package main
 
 import (
-    "fmt"
+    "html/template"
     "log"
     "net/http"
-    "time"
 )
 
-func clockHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, `
-        <!DOCTYPE html>
-        <html>
-        <body>
-            It's %d o'clock now.
-        </body>
-        </html>
-    `, time.Now().Hour())
+func htmlHandler0(w http.ResponseWriter, r *http.Request) {
+    // テンプレートをパース
+    t := template.Must(template.ParseFiles("bin/Go/src/sipo_porj/view/message.tpl"))
+
+    str := "SeaPop Message"
+
+    // テンプレートを描画
+    if err := t.ExecuteTemplate(w, "message.tpl", str); err != nil {
+        log.Fatal(err)
+    }
 }
 
 func main() {
-    // ハンドラーを登録
-    http.HandleFunc("/clock", clockHandler)
-    // 先ほどの静的ファイルハンドラー
-    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("/Go/bin/Go/src/sipo_porj"))))
+    http.HandleFunc("/msg", htmlHandler0)
+
     // サーバーを起動
-    log.Fatal(http.ListenAndServe(":8080", nil))
+    http.ListenAndServe(":8080", nil)
 }
