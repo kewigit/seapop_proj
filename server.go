@@ -22,7 +22,7 @@ func main() {
     // ハンドラーを登録
     http.HandleFunc("/clock", clockHandler)
     // 先ほどの静的ファイルハンドラー
-    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("/etc/gohttpserver/doc"))))
+    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("/Go/bin/Go/src/sipo_porj"))))
     // サーバーを起動
     log.Fatal(http.ListenAndServe(":8080", nil))
 }
